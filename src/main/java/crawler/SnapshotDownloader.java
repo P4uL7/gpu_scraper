@@ -1,5 +1,6 @@
 package crawler;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -9,14 +10,16 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
+@Slf4j
 public class SnapshotDownloader {
     public static void start(String location) {
 
         String URL = "http://web.archive.org/web/20081214203623/http://store.steampowered.com/hwsurvey/videocard/";
 
         int i = 1;
+        log.info("Downloading snapshots...");
         while (!URL.isEmpty()) {
-            System.out.format("%3d: %s\n", i++, URL);
+            log.info("{}: {}", i++, URL);
             Document doc = null;
             try {
                 doc = Jsoup.connect(URL).get();
@@ -40,7 +43,7 @@ public class SnapshotDownloader {
                 URL = elem.attr("href");
             }
         }
-        System.out.println(">>> DONE");
+        log.info("Snapshot download complete!");
     }
 
 }
