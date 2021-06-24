@@ -17,5 +17,6 @@ target/
 
 #Project specific
 /old_csv_data/
-/gpu_data/
+/snapshots/
+/snapshots_test/
 /src/main/java/RL/test/

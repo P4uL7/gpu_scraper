@@ -4,7 +4,8 @@ import csv.CsvWriter;
 import java.io.File;
 import java.io.IOException;
 
-import static utils.Constants.*;
+import static utils.Constants.CSV_FILE_TEST;
+import static utils.Constants.LOCATION_TEST;
 
 public class Main {
     //Start date = jul 2008
@@ -19,24 +20,24 @@ public class Main {
     }
 
     private static void downloadSnapshots() {
-        crawler.SnapshotDownloader.start(LOCATION);
+        crawler.SnapshotDownloader.start(LOCATION_TEST);
     }
 
     private static void getMostRecentSnapshots() {
-        crawler.SnapshotManager.getMostRecent(LOCATION, true);
+        crawler.SnapshotManager.getMostRecent(LOCATION_TEST, true);
     }
 
     private static void parseSnapshotData() {
 
-        crawler.SnapshotParser.parseSnapshot(LOCATION, "20100531051401.html"); // LAST OLD
-        crawler.SnapshotParser.parseSnapshot(LOCATION, "20100623080726.html"); // FIRST NEW
+        crawler.SnapshotParser.parseSnapshot(LOCATION_TEST, "20100531051401.html"); // LAST OLD
+        crawler.SnapshotParser.parseSnapshot(LOCATION_TEST, "20100623080726.html"); // FIRST NEW
 
-        File f = new File(LATEST);
+        File f = new File(LOCATION_TEST);
         String[] list = f.list();
 
         assert list != null;
         for (String snap : list) {
-            SnapshotParser.parseSnapshot(LATEST, snap);
+            SnapshotParser.parseSnapshot(LOCATION_TEST, snap);
         }
 
 //        List<GPU> gpuList = model.GpuList.getGpuList();
