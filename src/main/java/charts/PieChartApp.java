@@ -17,9 +17,10 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Random;
 
-public class PieChartSample extends Application {
+public class PieChartApp extends Application {
 
     private final Map<Brand, Double> marketShare = new HashMap<>();
 
@@ -44,7 +45,7 @@ public class PieChartSample extends Application {
         chart.setLegendSide(Side.LEFT);
         chart.setPrefSize(650, 450);
         Scene scene = new Scene(chart);
-        scene.getStylesheets().add(getClass().getResource("/pieChart.css").toExternalForm());
+        scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/pieChart.css")).toExternalForm());
         stage.setScene(scene);
         stage.show();
 

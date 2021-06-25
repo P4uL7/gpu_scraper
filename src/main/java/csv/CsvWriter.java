@@ -41,7 +41,7 @@ public class CsvWriter {
                 BufferedWriter writer = Files.newBufferedWriter(Paths.get(location));
 
                 CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.DEFAULT
-                        .withHeader(head));
+                        .withHeader(head))
 
         ) {
 
