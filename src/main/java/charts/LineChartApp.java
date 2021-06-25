@@ -55,7 +55,7 @@ public class LineChartApp extends Application {
         lineChart.verticalGridLinesVisibleProperty().setValue(Boolean.FALSE);
         Scene scene = new Scene(lineChart, 1280, 720);
         lineChart.getData().addAll(seriesList);
-//        scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/linechart.css")).toExternalForm()); //TODO only for brands
+//        scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/linechart.css")).toExternalForm()); //fix brandPopularity colors
         stage.setScene(scene);
         stage.show();
 

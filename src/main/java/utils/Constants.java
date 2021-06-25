@@ -15,12 +15,12 @@ public class Constants {
     public static final String LOCATION_TEST = "." + File.separator + "snapshots_test";
     public static final String LATEST_TEST = LOCATION_TEST + File.separator + "latest";
 
-    public static final String CSV_FILE = "." + File.separator + "gpu_data_v4_final.csv";
+    public static final String CSV_FILE = "." + File.separator + "gpu_data_v5.csv";
     public static final String CSV_FILE_TEST = "." + File.separator + "gpu_data_test.csv";
 
     public static final String[] YEAR = {"2008", "2009", "2010", "2011", "2012", "2013", "2014", "2015", "2016", "2017", "2018", "2019", "2020", "2021"};
     public static final HashMap<String, Integer> monthIndex = new HashMap<>();
-    public static final YearData DATA_ALL = new YearData(3, 147);
+    public static final YearData DATA_ALL = new YearData(3, 148); // 148 = MAY-2021
     public static final YearData DATA_2008 = new YearData(3, 8);
     public static final YearData DATA_2009 = new YearData(9, 20);
     public static final YearData DATA_2010 = new YearData(21, 32);
@@ -34,7 +34,7 @@ public class Constants {
     public static final YearData DATA_2018 = new YearData(108, 119);
     public static final YearData DATA_2019 = new YearData(120, 131);
     public static final YearData DATA_2020 = new YearData(132, 143);
-    public static final YearData DATA_2021 = new YearData(144, 147);
+    public static final YearData DATA_2021 = new YearData(144, 148);
 
     static {
         int i = 1;
