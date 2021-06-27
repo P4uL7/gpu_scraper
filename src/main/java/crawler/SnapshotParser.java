@@ -18,31 +18,31 @@ public class SnapshotParser {
 
     public static final String LAST_OLD_SNAPSHOT = "20100531051401.html";
 
-    public static void parseSnapshot(String location, String snapshot) {
-        String snapshotLocation = location + File.separator + snapshot;
-        boolean oldFormat = snapshot.compareTo(LAST_OLD_SNAPSHOT) <= 0;
-        File snap = new File(snapshotLocation);
+    public static void parseSnapshot(final String location, final String snapshot) {
+        final String snapshotLocation = location + File.separator + snapshot;
+        final boolean oldFormat = snapshot.compareTo(LAST_OLD_SNAPSHOT) <= 0;
+        final File snap = new File(snapshotLocation);
         Document doc = null;
         try {
             doc = Jsoup.parse(snap, "UTF-8");
-        } catch (IOException e) {
+        } catch (final IOException e) {
             e.printStackTrace();
         }
 
         assert doc != null;
 
-        Element h1 = doc.select("h1").get(0);
-        String date = h1.text().split(":")[1].trim();
-        String month = date.split(" ")[0].trim();
-        String year = date.split(" ")[1].trim();
+        final Element h1 = doc.select("h1").get(0);
+        final String date = h1.text().split(":")[1].trim();
+        final String month = date.split(" ")[0].trim();
+        final String year = date.split(" ")[1].trim();
 
 //        System.out.println(month + " " + year);
 
-        Element elem = doc.select("div[id=sub_stats]").get(0);
+        final Element elem = doc.select("div[id=sub_stats]").get(0);
 
         Element allGpuTable = elem.select("div[class=substats_col_left col_header]").get(1);
 
-        List<String> headers = new ArrayList<>();
+        final List<String> headers = new ArrayList<>();
         while (!allGpuTable.text().isEmpty()) {
             headers.add(allGpuTable.text());
             allGpuTable = allGpuTable.nextElementSibling();
@@ -74,9 +74,9 @@ public class SnapshotParser {
             gpus = new ArrayList<>();
             while (!allGpuTable.text().contains("Other")) {
                 gpu = new String[headers.size()];
-                Elements children = allGpuTable.children();
+                final Elements children = allGpuTable.children();
                 index = 0;
-                for (Element child : children) {
+                for (final Element child : children) {
                     if (index == headers.size()) {
                         continue;
                     }
@@ -96,9 +96,9 @@ public class SnapshotParser {
         loadGpusIntoList(headers, gpus, month, year);
     }
 
-    private static void loadGpusIntoList(List<String> headers, List<String[]> gpus, String month, String year) {
-        String currentHeaderMonth = headers.get(headers.size() - 1).toUpperCase();
-        for (String[] gpu : gpus) {
+    private static void loadGpusIntoList(final List<String> headers, final List<String[]> gpus, final String month, final String year) {
+        final String currentHeaderMonth = headers.get(headers.size() - 1).toUpperCase();
+        for (final String[] gpu : gpus) {
             GPU currentGPU = null;
             if (GpuList.getGpu(gpu[0]) == null) {
                 currentGPU = new GPU(gpu[0]);
@@ -108,7 +108,7 @@ public class SnapshotParser {
             }
 
             for (int i = 1; i < headers.size(); i++) {
-                String mon = headers.get(i);
+                final String mon = headers.get(i);
                 String tempYear = year;
                 if (Constants.monthIndex.get(mon.toUpperCase()) > Constants.monthIndex.get(currentHeaderMonth)) {
                     tempYear = "" + (Integer.parseInt(year) - 1);

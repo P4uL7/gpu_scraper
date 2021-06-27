@@ -13,27 +13,27 @@ import java.util.List;
 @Slf4j
 public class SnapshotManager {
 
-    public static void getMostRecent(String location, boolean copyToNewFolder) {
+    public static void getMostRecent(final String location, final boolean copyToNewFolder) {
 
-        HashMap<String, String> latestSnapshots = new HashMap<>();
+        final HashMap<String, String> latestSnapshots = new HashMap<>();
 
-        File f = new File(location);
-        List<String> list = Arrays.asList(f.list());
+        final File f = new File(location);
+        final List<String> list = Arrays.asList(f.list());
         Collections.sort(list);
 
         log.info("Initial snapshot count: {}", list.size());
-        for (String snapshot : list) {
+        for (final String snapshot : list) {
             latestSnapshots.put(snapshot.substring(0, 6), snapshot);
         }
 
         log.info("Latest snapshot count: {}", latestSnapshots.size());
 
         if (copyToNewFolder) {
-            File targetDirectory = new File(location + File.separator + "latest");
-            for (String snap : latestSnapshots.values()) {
+            final File targetDirectory = new File(location + File.separator + "latest");
+            for (final String snap : latestSnapshots.values()) {
                 try {
                     FileUtils.copyFileToDirectory(new File(location + File.separator + snap), targetDirectory);
-                } catch (IOException e) {
+                } catch (final IOException e) {
                     e.printStackTrace();
                 }
             }

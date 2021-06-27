@@ -9,7 +9,7 @@ import static utils.Constants.*;
 public class Main {
     //Start date = jul 2008
 
-    public static void main(String[] args) {
+    public static void main(final String[] args) {
         downloadSnapshots();
         getMostRecentSnapshots();
 
@@ -30,11 +30,11 @@ public class Main {
 //        crawler.SnapshotParser.parseSnapshot(LOCATION_TEST, "20100531051401.html"); // LAST OLD
 //        crawler.SnapshotParser.parseSnapshot(LOCATION_TEST, "20100623080726.html"); // FIRST NEW
 
-        File f = new File(LATEST_TEST);
-        String[] list = f.list();
+        final File f = new File(LATEST_TEST);
+        final String[] list = f.list();
 
         assert list != null;
-        for (String snap : list) {
+        for (final String snap : list) {
             SnapshotParser.parseSnapshot(LATEST_TEST, snap);
         }
 
@@ -45,7 +45,7 @@ public class Main {
     private static void writeDataToCSV() {
         try {
             CsvWriter.write(CSV_FILE_TEST);
-        } catch (IOException e) {
+        } catch (final IOException e) {
             e.printStackTrace();
         }
 

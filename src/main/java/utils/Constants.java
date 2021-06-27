@@ -38,7 +38,7 @@ public class Constants {
 
     static {
         int i = 1;
-        for (Month m : Month.values()) {
+        for (final Month m : Month.values()) {
             monthIndex.put(m.toString(), i++);
         }
     }

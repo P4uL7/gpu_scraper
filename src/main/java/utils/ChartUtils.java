@@ -12,19 +12,19 @@ import static utils.Constants.PopularitySort;
 
 public abstract class ChartUtils {
 
-    public static LinkedHashMap<String, Number> getTopXGpus(final List<List<String>> csvData, final int X, final PopularitySort sort, final boolean includeSeries, final int startDate, final int endDate) {
-        HashMap<String, Number> popularityList = new HashMap<>();
+    public static Set<String> getTopXGpus(final List<List<String>> csvData, final int X, final PopularitySort sort, final boolean includeSeries, final int startDate, final int endDate) {
+        final HashMap<String, Number> popularityList = new HashMap<>();
         for (int g = 1; g < csvData.size(); g++) {
-            List<String> gpu = csvData.get(g);
+            final List<String> gpu = csvData.get(g);
             if (!includeSeries && gpu.get(1).toLowerCase().contains("series")) {
                 continue;
             }
 
             double totalScore = 0d;
             for (int i = startDate; i <= endDate; i++) {
-                String value = gpu.get(i);
+                final String value = gpu.get(i);
                 if (!value.equals("-")) {
-                    double doubleValue = Double.parseDouble(value);
+                    final double doubleValue = Double.parseDouble(value);
                     if (sort == PopularitySort.SUM) {
                         totalScore += doubleValue;
                     } else if (sort == PopularitySort.MAX) {
@@ -42,21 +42,21 @@ public abstract class ChartUtils {
                 .sorted(Map.Entry.comparingByValue((o1, o2) -> -(new BigDecimal(o1.toString()).compareTo(new BigDecimal(o2.toString())))))
                 .limit(X)
                 .collect(Collectors.toMap(
-                        Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
+                        Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new)).keySet();
     }
 
-    public static Double[][] getBrandPopularity(final List<List<String>> csvData, int startIndex, int endIndex) {
-        Double[][] brandPopularity = new Double[3][endIndex - startIndex + 1];
-        for (Double[] doubles : brandPopularity) {
+    public static Double[][] getBrandPopularity(final List<List<String>> csvData, final int startIndex, final int endIndex) {
+        final Double[][] brandPopularity = new Double[3][endIndex - startIndex + 1];
+        for (final Double[] doubles : brandPopularity) {
             Arrays.fill(doubles, 0d);
         }
-        Map<String, Integer> brandMap = new HashMap<>();
+        final Map<String, Integer> brandMap = new HashMap<>();
         brandMap.put("NVIDIA", 0);
         brandMap.put("AMD", 1);
         brandMap.put("INTEL", 2);
         for (int g = 1; g < csvData.size(); g++) {
-            List<String> gpu = csvData.get(g);
-            String brand = gpu.get(2);
+            final List<String> gpu = csvData.get(g);
+            final String brand = gpu.get(2);
             for (int i = startIndex; i <= endIndex; i++) {
                 if (!gpu.get(i).equals("-")) {
                     brandPopularity[brandMap.get(brand)][i - startIndex] += Double.parseDouble(gpu.get(i));
@@ -72,9 +72,9 @@ public abstract class ChartUtils {
         return brandPopularity;
     }
 
-    public static void addTooltips(LineChart<String, Number> lineChart) {
-        for (XYChart.Series<String, Number> s : lineChart.getData()) {
-            for (XYChart.Data<String, Number> d : s.getData()) {
+    public static void addTooltips(final LineChart<String, Number> lineChart) {
+        for (final XYChart.Series<String, Number> s : lineChart.getData()) {
+            for (final XYChart.Data<String, Number> d : s.getData()) {
                 Tooltip.install(d.getNode(), new Tooltip(
                         s.getName() + "\n" +
                                 "Date: " + d.getXValue() + "\n" +
@@ -83,9 +83,9 @@ public abstract class ChartUtils {
         }
     }
 
-    public static void hideDataPoints(LineChart<String, Number> lineChart) {
-        for (XYChart.Series<String, Number> s : lineChart.getData()) {
-            for (XYChart.Data<String, Number> d : s.getData()) {
+    public static void hideDataPoints(final LineChart<String, Number> lineChart) {
+        for (final XYChart.Series<String, Number> s : lineChart.getData()) {
+            for (final XYChart.Data<String, Number> d : s.getData()) {
                 d.getNode().setVisible(false);
             }
         }

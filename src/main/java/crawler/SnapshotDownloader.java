@@ -12,7 +12,7 @@ import java.nio.charset.StandardCharsets;
 
 @Slf4j
 public class SnapshotDownloader {
-    public static void start(String location) {
+    public static void start(final String location) {
 
         String URL = "http://web.archive.org/web/20081214203623/http://store.steampowered.com/hwsurvey/videocard/";
 
@@ -23,21 +23,21 @@ public class SnapshotDownloader {
             Document doc = null;
             try {
                 doc = Jsoup.connect(URL).get();
-            } catch (IOException e) {
+            } catch (final IOException e) {
                 e.printStackTrace();
             }
-            Document parse = Jsoup.parse(doc.html());
-            String name = URL.split("\\/")[4];
-            File f = new File(location + File.separator + name + ".html");
+            final Document parse = Jsoup.parse(doc.html());
+            final String name = URL.split("\\/")[4];
+            final File f = new File(location + File.separator + name + ".html");
             try {
                 FileUtils.writeStringToFile(f, doc.html(), StandardCharsets.UTF_8);
-            } catch (IOException e) {
+            } catch (final IOException e) {
                 e.printStackTrace();
             }
 
-            Element elem = parse.select("img[alt=Next capture]").get(0).parent();
+            final Element elem = parse.select("img[alt=Next capture]").get(0).parent();
             if (URL.equals(elem.attr("href"))) {
-                Element element = parse.select("td[class=f]").get(0);
+                final Element element = parse.select("td[class=f]").get(0);
                 URL = element.child(0).attr("href");
             } else {
                 URL = elem.attr("href");

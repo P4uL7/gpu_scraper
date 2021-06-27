@@ -13,7 +13,7 @@ import javafx.stage.Stage;
 
 import java.util.*;
 
-import static utils.ChartUtils.*;
+import static utils.ChartUtils.addTooltips;
 import static utils.Constants.*;
 
 
@@ -21,26 +21,30 @@ public class LineChartApp extends Application {
     private static final List<List<String>> csvData = CsvReader.getCsvData(CSV_FILE);
     public static final List<String> headers = csvData.get(0);
 
-    public static void main(String[] args) {
+    public static void main(final String[] args) {
         launch(args);
     }
 
     @Override
-    public void start(Stage stage) {
+    public void start(final Stage stage) {
         stage.setTitle("Steam Hardware Survey Data");
 
         final Set<String> categories = new LinkedHashSet<>();
-        List<XYChart.Series<String, Number>> seriesList = new ArrayList<>();
+        final List<XYChart.Series<String, Number>> seriesList = new ArrayList<>();
 
-        int startIndex = DATA_2008.getSTART_INDEX();
-        int endIndex = DATA_2021.getEND_INDEX();
+        final int startIndex = DATA_2020.getSTART_INDEX() + 10;
+        final int endIndex = DATA_2021.getEND_INDEX();
 
-        // GPU popularity chart
-        LinkedHashMap<String, Number> topXGpus = getTopXGpus(csvData, 8, PopularitySort.SUM, false, startIndex, endIndex);
-        createGpuSeries(categories, seriesList, startIndex, endIndex, topXGpus);
+        // GPU popularity chart for user defined gpus
+        final Set<String> gpuList = new HashSet<>(Arrays.asList("3050", "3060", "3070", "3080", "3090"));
+        createGpuSeries(categories, seriesList, startIndex, endIndex, gpuList, true);
+
+//        // GPU popularity chart
+//        final Set<String> gpuList = getTopXGpus(csvData, 8, PopularitySort.SUM, false, startIndex, endIndex);
+//        createGpuSeries(categories, seriesList, startIndex, endIndex, gpuList, false);
 
 //        // Brand popularity chart
-//        Double[][] brandPopularity = getBrandPopularity(csvData, startIndex, endIndex);
+//        final Double[][] brandPopularity = getBrandPopularity(csvData, startIndex, endIndex);
 //        createBrandSeries(categories, seriesList, startIndex, endIndex, brandPopularity);
 
         final ObservableList<String> c = FXCollections.observableArrayList(categories);
@@ -53,7 +57,7 @@ public class LineChartApp extends Application {
 
         lineChart.setTitle("GPU Popularity");
         lineChart.verticalGridLinesVisibleProperty().setValue(Boolean.FALSE);
-        Scene scene = new Scene(lineChart, 1280, 720);
+        final Scene scene = new Scene(lineChart, 1280, 720);
         lineChart.getData().addAll(seriesList);
 //        scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/linechart.css")).toExternalForm()); //fix brandPopularity colors
         stage.setScene(scene);
@@ -63,24 +67,36 @@ public class LineChartApp extends Application {
         addTooltips(lineChart);
 
         // hide data points
-        hideDataPoints(lineChart);
+//        hideDataPoints(lineChart);
     }
 
-    private void createGpuSeries(Set<String> categories, List<XYChart.Series<String, Number>> seriesList, int startIndex, int endIndex, LinkedHashMap<String, Number> topXGpus) {
+    private void createGpuSeries(final Set<String> categories, final List<XYChart.Series<String, Number>> seriesList, final int startIndex, final int endIndex, final Set<String> gpuList, final boolean userDefinedList) {
         for (int g = 1; g < csvData.size(); g++) {
-            List<String> gpu = csvData.get(g);
-            XYChart.Series<String, Number> series = new XYChart.Series<>();
-            series.setName(gpu.get(1));
+            final List<String> gpu = csvData.get(g);
+            final XYChart.Series<String, Number> series = new XYChart.Series<>();
+            final String gpuName = gpu.get(1);
+            series.setName(gpuName);
             boolean addGpu = false;
 
             for (int i = startIndex; i <= endIndex; i++) {
-                if (!topXGpus.containsKey(gpu.get(1))) {
+                if (userDefinedList) {
+                    boolean found = false;
+                    for (final String iterGpuName : gpuList) {
+                        if (gpuName.toLowerCase().contains(iterGpuName.toLowerCase())) {
+                            found = true;
+                            break;
+                        }
+                    }
+                    if (!found) {
+                        continue;
+                    }
+                } else if (!gpuList.contains(gpuName)) {
                     continue;
                 }
                 categories.add(headers.get(i));
                 if (!gpu.get(i).equals("-")) {
-                    double value = Double.parseDouble(gpu.get(i));
-                    XYChart.Data<String, Number> data = new XYChart.Data<>(headers.get(i), value);
+                    final double value = Double.parseDouble(gpu.get(i));
+                    final XYChart.Data<String, Number> data = new XYChart.Data<>(headers.get(i), value);
                     series.getData().add(data);
                     addGpu = true;
                 }
@@ -91,19 +107,19 @@ public class LineChartApp extends Application {
         }
     }
 
-    private void createBrandSeries(Set<String> categories, List<XYChart.Series<String, Number>> seriesList, int startIndex, int endIndex, Double[][] brandPopularity) {
-        Map<Integer, String> brandMap = new HashMap<>();
+    private void createBrandSeries(final Set<String> categories, final List<XYChart.Series<String, Number>> seriesList, final int startIndex, final int endIndex, final Double[][] brandPopularity) {
+        final Map<Integer, String> brandMap = new HashMap<>();
         brandMap.put(0, "NVIDIA");
         brandMap.put(1, "AMD");
         brandMap.put(2, "INTEL");
 
         for (int brand = 0; brand < brandPopularity.length; brand++) {
-            XYChart.Series<String, Number> series = new XYChart.Series<>();
+            final XYChart.Series<String, Number> series = new XYChart.Series<>();
             series.setName(brandMap.get(brand));
 
             for (int i = startIndex; i <= endIndex; i++) {
                 categories.add(headers.get(i));
-                XYChart.Data<String, Number> data = new XYChart.Data<>(headers.get(i), brandPopularity[brand][i - startIndex]);
+                final XYChart.Data<String, Number> data = new XYChart.Data<>(headers.get(i), brandPopularity[brand][i - startIndex]);
                 series.getData().add(data);
             }
             seriesList.add(series);

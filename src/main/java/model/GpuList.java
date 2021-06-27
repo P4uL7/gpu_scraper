@@ -10,14 +10,14 @@ public class GpuList {
     private GpuList() {
     }
 
-    public static void addGpu(GPU gpu) {
+    public static void addGpu(final GPU gpu) {
         if (!gpuList.contains(gpu)) {
             gpuList.add(gpu);
         } else throw new RuntimeException(gpu.getName() + " already in list !");
     }
 
-    public static GPU getGpu(String name) {
-        for (GPU g : gpuList) {
+    public static GPU getGpu(final String name) {
+        for (final GPU g : gpuList) {
             if (g.getName().equals(name)) {
                 return g;
             }

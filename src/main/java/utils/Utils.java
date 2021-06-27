@@ -7,8 +7,8 @@ import java.math.RoundingMode;
 
 public class Utils {
 
-    public static Month month(String string) {
-        for (Month m : Month.values()) {
+    public static Month month(final String string) {
+        for (final Month m : Month.values()) {
             if (m.toString().equalsIgnoreCase(string)) {
                 return m;
             }
@@ -16,7 +16,7 @@ public class Utils {
         throw new RuntimeException("Invalid month given: " + string);
     }
 
-    public static double roundDouble(double value, int places) {
+    public static double roundDouble(final double value, final int places) {
         if (places < 0) throw new IllegalArgumentException();
 
         BigDecimal bd = BigDecimal.valueOf(value);

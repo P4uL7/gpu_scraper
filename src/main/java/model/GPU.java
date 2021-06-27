@@ -15,9 +15,9 @@ public class GPU implements Comparable<GPU> {
     private final Brand brand;
     private TreeMap<String, TreeMap<Month, String>> popularityMap = new TreeMap<>();
 
-    public GPU(String name) {
+    public GPU(final String name) {
         this.name = name;
-        String toLowerCase = name.toLowerCase();
+        final String toLowerCase = name.toLowerCase();
         if (toLowerCase.contains("nvidia")) {
             this.brand = Brand.NVIDIA;
         } else if (toLowerCase.contains("intel")) {
@@ -31,16 +31,16 @@ public class GPU implements Comparable<GPU> {
     }
 
     private void initializePopularityMap() {
-        for (String year : Constants.YEAR) {
+        for (final String year : Constants.YEAR) {
             popularityMap.put(year, new TreeMap<>());
-            for (Month month : Month.values()) {
+            for (final Month month : Month.values()) {
                 popularityMap.get(year).put(month, "-");
             }
         }
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         if (o == this) {
             return true;
         }
@@ -50,12 +50,12 @@ public class GPU implements Comparable<GPU> {
         return this.getName().equals(((GPU) o).getName());
     }
 
-    public void addInfo(String year, Month month, String popularity) {
+    public void addInfo(final String year, final Month month, final String popularity) {
         popularityMap.get(year).put(month, popularity);
     }
 
     @Override
-    public int compareTo(GPU o) {
+    public int compareTo(final GPU o) {
         if (getName() == null || o.getName() == null) {
             return 0;
         }
