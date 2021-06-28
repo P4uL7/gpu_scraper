@@ -1,0 +1,8 @@
+.chart {
+    -fx-padding: 10px;
+    -fx-background-color: WHITE;
+}
+
+.chart-plot-background {
+    -fx-background-color: transparent;
+}

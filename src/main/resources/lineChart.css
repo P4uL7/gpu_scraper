@@ -21,3 +21,12 @@
 .default-color2.chart-line-symbol {
     -fx-background-color: #0071c5, #ffffff;
 }
+
+.chart {
+    -fx-padding: 10px;
+    -fx-background-color: WHITE;
+}
+
+.chart-plot-background {
+    -fx-background-color: transparent;
+}

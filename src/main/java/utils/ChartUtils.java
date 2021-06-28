@@ -1,6 +1,5 @@
 package utils;
 
-import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Tooltip;
 
@@ -9,6 +8,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static utils.Constants.PopularitySort;
+import static utils.Utils.roundDouble;
 
 public abstract class ChartUtils {
 
@@ -66,24 +66,27 @@ public abstract class ChartUtils {
 
         for (int i = 0; i < brandPopularity.length; i++) {
             for (int j = 0; j < brandPopularity[i].length; j++) {
-                brandPopularity[i][j] = Utils.roundDouble(brandPopularity[i][j], 2);
+                brandPopularity[i][j] = roundDouble(brandPopularity[i][j], 2);
             }
         }
         return brandPopularity;
     }
 
-    public static void addTooltips(final LineChart<String, Number> lineChart) {
+    public static void addTooltips(final XYChart<String, Number> lineChart, final boolean roundValues) {
         for (final XYChart.Series<String, Number> s : lineChart.getData()) {
             for (final XYChart.Data<String, Number> d : s.getData()) {
                 Tooltip.install(d.getNode(), new Tooltip(
                         s.getName() + "\n" +
                                 "Date: " + d.getXValue() + "\n" +
-                                "Popularity: " + d.getYValue() + "%"));
+                                "Popularity: " + (roundValues ? roundDouble(d.getYValue().doubleValue(), 2) : d.getYValue().doubleValue()) + "%"));
             }
         }
     }
 
-    public static void hideDataPoints(final LineChart<String, Number> lineChart) {
+    public static void hideDataPoints(final XYChart<String, Number> lineChart, final boolean hide) {
+        if (!hide) {
+            return;
+        }
         for (final XYChart.Series<String, Number> s : lineChart.getData()) {
             for (final XYChart.Data<String, Number> d : s.getData()) {
                 d.getNode().setVisible(false);

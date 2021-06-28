@@ -19,7 +19,9 @@ public class SnapshotDownloader {
         int i = 1;
         log.info("Downloading snapshots...");
         while (!URL.isEmpty()) {
-            log.info("{}: {}", i++, URL);
+            final String date = URL.split("\\/")[4];
+            final String prettyDate = date.substring(6, 8) + "." + date.substring(4, 6) + "." + date.substring(0, 4);
+            log.info("{}: {} -> {}", i++, prettyDate, URL);
             Document doc = null;
             try {
                 doc = Jsoup.connect(URL).get();
@@ -27,8 +29,7 @@ public class SnapshotDownloader {
                 e.printStackTrace();
             }
             final Document parse = Jsoup.parse(doc.html());
-            final String name = URL.split("\\/")[4];
-            final File f = new File(location + File.separator + name + ".html");
+            final File f = new File(location + File.separator + date + ".html");
             try {
                 FileUtils.writeStringToFile(f, doc.html(), StandardCharsets.UTF_8);
             } catch (final IOException e) {
