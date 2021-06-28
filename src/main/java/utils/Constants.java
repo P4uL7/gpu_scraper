@@ -7,7 +7,7 @@ import model.Month;
 import java.io.File;
 import java.util.HashMap;
 
-public class Constants {
+public abstract class Constants {
 
     public static final String LOCATION = "." + File.separator + "snapshots";
     public static final String LATEST = LOCATION + File.separator + "latest";

@@ -5,7 +5,7 @@ import model.Month;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-public class Utils {
+public abstract class Utils {
 
     public static Month month(final String string) {
         for (final Month m : Month.values()) {

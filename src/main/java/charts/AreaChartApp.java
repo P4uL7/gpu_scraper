@@ -85,20 +85,20 @@ public class AreaChartApp extends Application {
         final ObservableList<String> c = FXCollections.observableArrayList(categories);
         final CategoryAxis xAxis = new CategoryAxis();
         final NumberAxis yAxis = new NumberAxis();
+        xAxis.setCategories(c);
         yAxis.setAutoRanging(false);
         yAxis.setLowerBound(0);
         yAxis.setUpperBound(100);
-        xAxis.setCategories(c);
+
         final AreaChart<String, Number> areaChart = new AreaChart<>(xAxis, yAxis);
-        areaChart.setStyle("-fx-font-size: " + 18 + "px;");
         areaChart.setTitle("Monthly Popularity by Brand");
         areaChart.verticalGridLinesVisibleProperty().setValue(Boolean.FALSE);
         areaChart.horizontalGridLinesVisibleProperty().setValue(Boolean.FALSE);
         areaChart.getYAxis().setTickLabelsVisible(false);
         areaChart.getYAxis().setOpacity(0);
+        areaChart.getData().addAll(seriesList);
 
         final Scene scene = new Scene(areaChart, 1000, 900);
-        areaChart.getData().addAll(seriesList);
         scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/areaChart_3colors.css")).toExternalForm()); //fix brandPopularity colors
 
         stage.setScene(scene);
