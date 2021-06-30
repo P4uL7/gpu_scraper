@@ -72,6 +72,11 @@ public class LineChartApp extends Application {
 //        createGpuSeries(categories, seriesList, startIndex, endIndex, gpuList, false, false, true, null);
         // ------------------------------------------------------------------------------------------------------
 
+        // --------------------------------  GPU popularity chart for Ti GPUS ---------------------------------
+//        final Set<String> gpuList = getTopXGpus(csvData, 8, PopularitySort.SUM, false, startIndex, endIndex);
+//        createGpuSeries(categories, seriesList, startIndex, endIndex, gpuList, false, false, null, null);
+        // ------------------------------------------------------------------------------------------------------
+
         // -----------------------  GPU popularity chart for most popular GPUS ----------------------------------
 //        final Set<String> gpuList = getTopXGpus(csvData, 8, PopularitySort.SUM, false, startIndex, endIndex);
 //        createGpuSeries(categories, seriesList, startIndex, endIndex, gpuList, false, false, null, null);

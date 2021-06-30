@@ -22,6 +22,11 @@ public abstract class ChartUtils {
 //                continue;
 //            }
 
+            // TODO: uncomment for Ti GPUS
+//            if (!gpu.get(1).contains(" Ti")) {
+//                continue;
+//            }
+
             // TODO: uncomment to see AMD GPUS only
 //            if (!gpu.get(2).equals("AMD")) {
 //                continue;
