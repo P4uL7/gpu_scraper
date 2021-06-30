@@ -58,7 +58,7 @@ public abstract class ChartUtils {
             final List<String> gpu = csvData.get(g);
             final String brand = gpu.get(2);
             for (int i = startIndex; i <= endIndex; i++) {
-                if (!gpu.get(i).equals("-")) {
+                if (!gpu.get(i).contains("-")) {
                     brandPopularity[brandMap.get(brand)][i - startIndex] += Double.parseDouble(gpu.get(i));
                 }
             }

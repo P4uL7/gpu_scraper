@@ -1,5 +1,6 @@
 package charts;
 
+import csv.CsvReader;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
@@ -11,18 +12,21 @@ import javafx.scene.Scene;
 import javafx.scene.chart.PieChart;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import model.Brand;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 import java.util.Objects;
-import java.util.Random;
+import java.util.concurrent.atomic.AtomicInteger;
+
+import static utils.ChartUtils.getBrandPopularity;
+import static utils.Constants.*;
 
 public class PieChartApp extends Application {
 
-    private final Map<Brand, Double> marketShare = new HashMap<>();
+    private final static int startIndex = DATA_2008.getSTART_INDEX();
+    private final static int endIndex = DATA_2021.getEND_INDEX();
+    private final static List<List<String>> csvData = CsvReader.getCsvData(CSV_FILE);
+    private final static List<String> headers = csvData.get(0);
+    private final static Double[][] brandPopularity = getBrandPopularity(csvData, startIndex, endIndex);
 
     public static void main(final String[] args) {
         launch(args);
@@ -30,59 +34,54 @@ public class PieChartApp extends Application {
 
     @Override
     public void start(final Stage stage) {
-        stage.setTitle("GPU market share");
+        stage.setTitle("GPU market share " + headers.get(3));
 
-        marketShare.put(Brand.NVIDIA, 7.5);
-        marketShare.put(Brand.AMD, 18d);
-        marketShare.put(Brand.INTEL, 5.1);
         final ObservableList<PieChart.Data> pieChartData =
                 FXCollections.observableArrayList(
-                        new PieChart.Data(getNameWithPerc(Brand.NVIDIA), marketShare.get(Brand.NVIDIA)),
-                        new PieChart.Data(getNameWithPerc(Brand.AMD), marketShare.get(Brand.AMD)),
-                        new PieChart.Data(getNameWithPerc(Brand.INTEL), marketShare.get(Brand.INTEL)));
+                        new PieChart.Data("NVIDIA - " + brandPopularity[0][0] + "%", brandPopularity[0][0]),
+                        new PieChart.Data("AMD - " + brandPopularity[1][0] + "%", brandPopularity[1][0]),
+                        new PieChart.Data("Intel - " + brandPopularity[2][0] + "%", brandPopularity[2][0]));
         final PieChart chart = new PieChart(pieChartData);
         chart.setTitle("GPU market share");
-        chart.setLegendSide(Side.LEFT);
-        chart.setPrefSize(650, 450);
+        chart.setLegendSide(Side.RIGHT);
+        chart.setPrefSize(850, 650);
+        chart.setMinSize(850, 650);
+        chart.setMaxSize(850, 650);
         final Scene scene = new Scene(chart);
         scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/pieChart.css")).toExternalForm());
         stage.setScene(scene);
         stage.show();
 
         final Timeline timeline = new Timeline();
-        final Random random = new Random();
-        final double rangeMin = 1d;
-        final double rangeMax = 50d;
+        final AtomicInteger index = new AtomicInteger(1);
         timeline.getKeyFrames().add(
-                new KeyFrame(Duration.millis(1000), (ActionEvent actionEvent) -> {
-                    final double newValue = rangeMin + (rangeMax - rangeMin) * random.nextDouble();
-                    chart.setTitle("GPU " + newValue);
-                    marketShare.put(Brand.NVIDIA, newValue);
+                new KeyFrame(Duration.millis(100), (ActionEvent actionEvent) -> {
+                    try {
+                        chart.setTitle(headers.get(index.get() + 3));
 
-                    pieChartData.get(0).setName(getNameWithPerc(Brand.NVIDIA));
-                    pieChartData.get(0).setPieValue(marketShare.get(Brand.NVIDIA));
-                    pieChartData.get(1).setName(getNameWithPerc(Brand.AMD));
-                    pieChartData.get(1).setPieValue(marketShare.get(Brand.AMD));
-                    pieChartData.get(2).setName(getNameWithPerc(Brand.INTEL));
-                    pieChartData.get(2).setPieValue(marketShare.get(Brand.INTEL));
+                        pieChartData.get(0).setName("NVIDIA - " + formatAsString(brandPopularity[0][index.get()]) + "%");
+                        pieChartData.get(0).setPieValue(brandPopularity[0][index.get()]);
+                        pieChartData.get(1).setName("AMD - " + formatAsString(brandPopularity[1][index.get()]) + "%");
+                        pieChartData.get(1).setPieValue(brandPopularity[1][index.get()]);
+                        pieChartData.get(2).setName("INTEL - " + formatAsString(brandPopularity[2][index.get()]) + "%");
+                        pieChartData.get(2).setPieValue(brandPopularity[2][index.get()]);
+                    } catch (final Exception e) {
+                        System.err.println("Done");
+                    }
+                    if (index.incrementAndGet() == endIndex) {
+                        System.err.println("Done");
+                        timeline.stop();
+                    }
+
                 }));
         timeline.setCycleCount(1000);
         timeline.setAutoReverse(true);  //!?
+
         timeline.play();
 
     }
 
-    private String getNameWithPerc(final Brand brand) {
-        final double total = marketShare.values().stream().mapToDouble(Double::doubleValue).sum();
-        final double realPercentage = (100 * marketShare.get(brand)) / total;
-        return brand.toString() + " - " + round(realPercentage, 2) + "%";
-    }
-
-    private double round(final double value, final int places) {
-        if (places < 0) throw new IllegalArgumentException();
-
-        BigDecimal bd = BigDecimal.valueOf(value);
-        bd = bd.setScale(places, RoundingMode.HALF_UP);
-        return bd.doubleValue();
+    private String formatAsString(final double number) {
+        return String.format("%05.2f", number);
     }
 }

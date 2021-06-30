@@ -9,3 +9,13 @@
 .default-color2.chart-pie {
     -fx-pie-color: #0071c5;
 }
+
+.chart {
+    -fx-padding: 10px;
+    -fx-background-color: WHITE;
+    -fx-font-size: 18px;
+}
+
+.chart-plot-background {
+    -fx-background-color: transparent;
+}

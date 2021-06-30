@@ -36,7 +36,7 @@ public class LineChartApp extends Application {
         final Set<String> categories = new LinkedHashSet<>();
         final List<XYChart.Series<String, Number>> seriesList = new ArrayList<>();
 
-        boolean isBrandPopularityChart = false;
+        final boolean isBrandPopularityChart = false;
 
         // ----------------------------  GPU popularity chart for user defined gpus  ----------------------------
         final Set<String> series8000 = new HashSet<>(Arrays.asList("GT 8", "GeForce 8")); // with and without "M"

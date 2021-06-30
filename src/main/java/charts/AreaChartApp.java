@@ -21,9 +21,9 @@ import static utils.Constants.*;
 public class AreaChartApp extends Application {
 
     private static final List<List<String>> csvData = CsvReader.getCsvData(CSV_FILE);
-    public static final List<String> headers = csvData.get(0);
-    final int startIndex = DATA_2008.getSTART_INDEX();
-    final int endIndex = DATA_2021.getEND_INDEX();
+    private static final List<String> headers = csvData.get(0);
+    private static final int startIndex = DATA_2008.getSTART_INDEX();
+    private static final int endIndex = DATA_2021.getEND_INDEX();
 
     public static void main(final String[] args) {
         launch(args);
