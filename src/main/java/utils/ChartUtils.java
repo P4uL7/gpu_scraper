@@ -16,6 +16,17 @@ public abstract class ChartUtils {
         final HashMap<String, Number> popularityList = new HashMap<>();
         for (int g = 1; g < csvData.size(); g++) {
             final List<String> gpu = csvData.get(g);
+
+            // TODO: uncomment for mobile GPUS
+//            if (!gpu.get(1).endsWith("M") && !gpu.get(1).endsWith("MX")) {
+//                continue;
+//            }
+
+            // TODO: uncomment to see AMD GPUS only
+//            if (!gpu.get(2).equals("AMD")) {
+//                continue;
+//            }
+
             if (!includeSeries && gpu.get(1).toLowerCase().contains("series")) {
                 continue;
             }

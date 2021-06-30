@@ -22,7 +22,7 @@ public class LineChartApp extends Application {
     private static final List<List<String>> csvData = CsvReader.getCsvData(CSV_FILE);
     public static final List<String> headers = csvData.get(0);
 
-    private static final int startIndex = DATA_2019.getSTART_INDEX();
+    private static final int startIndex = DATA_2008.getSTART_INDEX();
     private static final int endIndex = DATA_2021.getEND_INDEX();
 
     public static void main(final String[] args) {
@@ -36,39 +36,45 @@ public class LineChartApp extends Application {
         final Set<String> categories = new LinkedHashSet<>();
         final List<XYChart.Series<String, Number>> seriesList = new ArrayList<>();
 
-        final boolean isBrandPopularityChart = false;
+        boolean isBrandPopularityChart = false;
 
-        // ----------------------------  GPU popularity chart for user defined gpus  ----------------------------
-        final Set<String> series8000 = new HashSet<>(Arrays.asList("GT 8", "GeForce 8")); // with and without "M"
-        final Set<String> series9000 = new HashSet<>(Arrays.asList("GT 9", "GeForce 9")); // with and without "M"
-        final Set<String> series200 = new HashSet<>(Arrays.asList("GTX 2", "GT 2", "GeForce 2")); // with and without "M"
-        final Set<String> series400 = new HashSet<>(Arrays.asList("GTX 4", "GT 4", "GeForce 4")); // with and without "M"
-        final Set<String> series500 = new HashSet<>(Arrays.asList("GTX 5", "GT 5", "GeForce 5")); // with and without "M"
-        final Set<String> series600 = new HashSet<>(Arrays.asList("GTX 6", "GT 6", "GeForce 6")); // with and without "M"
-        final Set<String> series700 = new HashSet<>(Arrays.asList("GTX 7", "GT 7", "GeForce 7")); // with and without "M"
-        final Set<String> series800M = new HashSet<>(Arrays.asList("GTX 8", "GT 8", "GeForce 8")); // only M
-        final Set<String> series900 = new HashSet<>(Arrays.asList("GTX 9", "GT 9", "GeForce 9")); // with and without "M"
+        // ----------------------------  GPU popularity chart for each generation  ------------------------------
+        final Set<String> series8000 = new HashSet<>(Arrays.asList("GT 8", "GeForce 8")); // oldGen = true
+        final Set<String> series9000 = new HashSet<>(Arrays.asList("GT 9", "GeForce 9")); // oldGen = true
+        final Set<String> series200 = new HashSet<>(Arrays.asList("GTX 2", "GT 2", "GeForce 2")); // oldGen = false
+        final Set<String> series400 = new HashSet<>(Arrays.asList("GTX 4", "GT 4", "GeForce 4"));
+        final Set<String> series500 = new HashSet<>(Arrays.asList("GTX 5", "GT 5", "GeForce 5"));
+        final Set<String> series600 = new HashSet<>(Arrays.asList("GTX 6", "GT 6", "GeForce 6"));
+        final Set<String> series700 = new HashSet<>(Arrays.asList("GTX 7", "GT 7", "GeForce 7"));
+        final Set<String> series800 = new HashSet<>(Arrays.asList("GTX 8", "GT 8", "GeForce 8")); // mobile = true
+        final Set<String> series900 = new HashSet<>(Arrays.asList("GTX 9", "GT 9", "GeForce 9"));
         final Set<String> gtx10series = new HashSet<>(Arrays.asList("GTX 10", "GT 10"));
         final Set<String> gtx16series = new HashSet<>(Arrays.asList("GTX 16"));
         final Set<String> rtx20series = new HashSet<>(Arrays.asList("RTX 20"));
         final Set<String> rtx30series = new HashSet<>(Arrays.asList("RTX 30"));
 
-        final Set<String> topPopularityPerSeries = new HashSet<>(Arrays.asList("Nvidia GeForce 8800", "Nvidia GeForce 9800", "Nvidia GeForce GTX 260",
-                "Nvidia GeForce GTX 460", "Nvidia GeForce GTX 560", "Nvidia GeForce GTX 660", "Nvidia GeForce GTX 750 Ti", "Nvidia GeForce GTX 760",
-                "Nvidia GeForce GTX 960", "Nvidia GeForce GTX 970", "Nvidia GeForce GTX 1050 Ti", "Nvidia GeForce GTX 1060", "Nvidia GeForce GTX 1650",
-                "Nvidia GeForce RTX 2060", "Nvidia GeForce RTX 3070"));
+        final Set<String> series60 = new HashSet<>(Arrays.asList("Nvidia GeForce 8600", "Nvidia GeForce 9600", "Nvidia GeForce GTX 260",
+                "Nvidia GeForce GTX 460", "Nvidia GeForce GTX 560", "Nvidia GeForce GTX 660", "Nvidia GeForce GTX 760", "Nvidia GeForce GTX 960",
+                "Nvidia GeForce RTX 2060", "Nvidia GeForce RTX 3060")); // strict = true
 
-        final Set<String> topPopularityOld = new HashSet<>(Arrays.asList("Nvidia GeForce 8800", "Nvidia GeForce 9800", "Nvidia GeForce GTX 260",
-                "Nvidia GeForce GTX 460", "Nvidia GeForce GTX 560", "Nvidia GeForce GTX 660", "Nvidia GeForce GTX 760"));
+        final Set<String> series70 = new HashSet<>(Arrays.asList("Nvidia GeForce 8700", "Nvidia GeForce 9700", "Nvidia GeForce GTX 270",
+                "Nvidia GeForce GTX 470", "Nvidia GeForce GTX 570", "Nvidia GeForce GTX 670", "Nvidia GeForce GTX 770", "Nvidia GeForce GTX 970",
+                "Nvidia GeForce RTX 2070", "Nvidia GeForce RTX 3070")); // strict = true
 
-        final Set<String> topPopularityCurrent = new HashSet<>(Arrays.asList("Nvidia GeForce GTX 960", "Nvidia GeForce GTX 970", "Nvidia GeForce GTX 1050 Ti", "Nvidia GeForce GTX 1060", "Nvidia GeForce GTX 1650",
-                "Nvidia GeForce RTX 2060", "Nvidia GeForce RTX 3070", "Nvidia GeForce GTX 750 Ti"));
-        createGpuSeries(categories, seriesList, startIndex, endIndex, gtx16series, true, false);
+        final Set<String> series80 = new HashSet<>(Arrays.asList("Nvidia GeForce 8800", "Nvidia GeForce 9800", "Nvidia GeForce GTX 280",
+                "Nvidia GeForce GTX 480", "Nvidia GeForce GTX 580", "Nvidia GeForce GTX 680", "Nvidia GeForce GTX 780", "Nvidia GeForce GTX 980",
+                "Nvidia GeForce RTX 2080", "Nvidia GeForce RTX 3080")); // strict = true
+        createGpuSeries(categories, seriesList, startIndex, endIndex, series8000, true, false, false, true);
         // ------------------------------------------------------------------------------------------------------
 
-        // ---------------------------------------  GPU popularity chart  ---------------------------------------
+        // --------------------------------  GPU popularity chart for mobile GPUS -------------------------------
 //        final Set<String> gpuList = getTopXGpus(csvData, 8, PopularitySort.SUM, false, startIndex, endIndex);
-//        createGpuSeries(categories, seriesList, startIndex, endIndex, gpuList, false, false);
+//        createGpuSeries(categories, seriesList, startIndex, endIndex, gpuList, false, false, true, null);
+        // ------------------------------------------------------------------------------------------------------
+
+        // -----------------------  GPU popularity chart for most popular GPUS ----------------------------------
+//        final Set<String> gpuList = getTopXGpus(csvData, 8, PopularitySort.SUM, false, startIndex, endIndex);
+//        createGpuSeries(categories, seriesList, startIndex, endIndex, gpuList, false, false, null, null);
         // ------------------------------------------------------------------------------------------------------
 
         // --------------------------------------  Brand popularity chart  --------------------------------------
@@ -89,7 +95,7 @@ public class LineChartApp extends Application {
         lineChart.verticalGridLinesVisibleProperty().setValue(Boolean.FALSE);
         lineChart.getData().addAll(seriesList);
 
-        final Scene scene = new Scene(lineChart, 950, 900);
+        final Scene scene = new Scene(lineChart, 1250, 900);
         scene.getStylesheets().add(Objects.requireNonNull(
                 getClass().getResource(isBrandPopularityChart ? "/lineChart.css" : "/whiteBackground.css")).toExternalForm());
 
@@ -103,13 +109,31 @@ public class LineChartApp extends Application {
         hideDataPoints(lineChart, false);
     }
 
-    private void createGpuSeries(final Set<String> categories, final List<XYChart.Series<String, Number>> seriesList, final int startIndex, final int endIndex, final Set<String> gpuList, final boolean userDefinedList, final boolean strict) {
+    private void createGpuSeries(final Set<String> categories, final List<XYChart.Series<String, Number>> seriesList,
+                                 final int startIndex, final int endIndex, final Set<String> gpuList,
+                                 final boolean userDefinedList, final boolean strict,
+                                 final Boolean mobile, final Boolean oldGen) {
         categories.clear();
         seriesList.clear();
         for (int g = 1; g < csvData.size(); g++) {
             final List<String> gpu = csvData.get(g);
-            final XYChart.Series<String, Number> series = new XYChart.Series<>();
             final String gpuName = gpu.get(1);
+
+            if (mobile != null) {
+                if (mobile && (!gpuName.endsWith("M") && !gpuName.endsWith("MX"))) {
+                    continue;
+                } else if (!mobile && (gpuName.endsWith("M") || gpuName.endsWith("MX"))) {
+                    continue;
+                }
+            }
+            if (oldGen != null) {
+                if (oldGen && !gpuName.contains("00")) {
+                    continue;
+                } else if (!oldGen && gpuName.contains("00")) {
+                    continue;
+                }
+            }
+            final XYChart.Series<String, Number> series = new XYChart.Series<>();
             series.setName(gpuName);
             boolean addGpu = false;
 
