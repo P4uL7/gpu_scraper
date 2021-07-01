@@ -6,7 +6,7 @@ import java.io.IOException;
 
 import static utils.Constants.*;
 
-public class Main {
+public class App {
     //Start date = jul 2008
 
     public static void main(final String[] args) {

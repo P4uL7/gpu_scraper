@@ -12,34 +12,34 @@ import static utils.Utils.roundDouble;
 
 public abstract class ChartUtils {
 
-    public static Set<String> getTopXGpus(final List<List<String>> csvData, final int X, final PopularitySort sort, final boolean includeSeries, final int startDate, final int endDate) {
+    public static Set<String> getTopXGpus(final List<List<String>> csvData, final int X, final PopularitySort sort,
+                                          final boolean includeSeries, final int startDate, final int endDate,
+                                          final boolean showOnlyMobile, final boolean showOnlyTi, final boolean showOnlyAMD) {
         final HashMap<String, Number> popularityList = new HashMap<>();
         for (int g = 1; g < csvData.size(); g++) {
             final List<String> gpu = csvData.get(g);
+            final String gpuName = gpu.get(1);
 
-            // TODO: uncomment for mobile GPUS
-//            if (!gpu.get(1).endsWith("M") && !gpu.get(1).endsWith("MX")) {
-//                continue;
-//            }
+            if (showOnlyMobile && !gpuName.endsWith("M") && !gpuName.endsWith("MX")) {
+                continue;
+            }
 
-            // TODO: uncomment for Ti GPUS
-//            if (!gpu.get(1).contains(" Ti")) {
-//                continue;
-//            }
+            if (showOnlyTi && !gpuName.contains(" Ti")) {
+                continue;
+            }
 
-            // TODO: uncomment to see AMD GPUS only
-//            if (!gpu.get(2).equals("AMD")) {
-//                continue;
-//            }
+            if (showOnlyAMD && !gpu.get(2).equals("AMD")) {
+                continue;
+            }
 
-            if (!includeSeries && gpu.get(1).toLowerCase().contains("series")) {
+            if (!includeSeries && gpuName.toLowerCase().contains("series")) {
                 continue;
             }
 
             double totalScore = 0d;
             for (int i = startDate; i <= endDate; i++) {
                 final String value = gpu.get(i);
-                if (!value.equals("-")) {
+                if (!value.contains("-")) {
                     final double doubleValue = Double.parseDouble(value);
                     if (sort == PopularitySort.SUM) {
                         totalScore += doubleValue;
@@ -51,7 +51,7 @@ public abstract class ChartUtils {
                 }
             }
 
-            popularityList.put(gpu.get(1), totalScore);
+            popularityList.put(gpuName, totalScore);
         }
 
         return popularityList.entrySet().stream()

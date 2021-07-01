@@ -47,7 +47,7 @@ public class LineChartApp extends Application {
         final Set<String> series600 = new HashSet<>(Arrays.asList("GTX 6", "GT 6", "GeForce 6"));
         final Set<String> series700 = new HashSet<>(Arrays.asList("GTX 7", "GT 7", "GeForce 7"));
         final Set<String> series800 = new HashSet<>(Arrays.asList("GTX 8", "GT 8", "GeForce 8")); // mobile = true
-        final Set<String> series900 = new HashSet<>(Arrays.asList("GTX 9", "GT 9", "GeForce 9"));
+        final Set<String> series900 = new HashSet<>(Arrays.asList("GTX 9", "GT 9", "GeForce 9")); // mobile = false
         final Set<String> gtx10series = new HashSet<>(Arrays.asList("GTX 10", "GT 10"));
         final Set<String> gtx16series = new HashSet<>(Arrays.asList("GTX 16"));
         final Set<String> rtx20series = new HashSet<>(Arrays.asList("RTX 20"));
@@ -64,21 +64,24 @@ public class LineChartApp extends Application {
         final Set<String> series80 = new HashSet<>(Arrays.asList("Nvidia GeForce 8800", "Nvidia GeForce 9800", "Nvidia GeForce GTX 280",
                 "Nvidia GeForce GTX 480", "Nvidia GeForce GTX 580", "Nvidia GeForce GTX 680", "Nvidia GeForce GTX 780", "Nvidia GeForce GTX 980",
                 "Nvidia GeForce RTX 2080", "Nvidia GeForce RTX 3080")); // strict = true
-        createGpuSeries(categories, seriesList, startIndex, endIndex, series8000, true, false, false, true);
+        createGpuSeries(categories, seriesList, startIndex, endIndex, series80, true, false, false, false);
         // ------------------------------------------------------------------------------------------------------
 
         // --------------------------------  GPU popularity chart for mobile GPUS -------------------------------
-//        final Set<String> gpuList = getTopXGpus(csvData, 8, PopularitySort.SUM, false, startIndex, endIndex);
+//        final Set<String> gpuList = getTopXGpus(csvData, 8, PopularitySort.SUM, false, startIndex, endIndex,
+//                true, false, false);
 //        createGpuSeries(categories, seriesList, startIndex, endIndex, gpuList, false, false, true, null);
         // ------------------------------------------------------------------------------------------------------
 
         // --------------------------------  GPU popularity chart for Ti GPUS ---------------------------------
-//        final Set<String> gpuList = getTopXGpus(csvData, 8, PopularitySort.SUM, false, startIndex, endIndex);
+//        final Set<String> gpuList = getTopXGpus(csvData, 8, PopularitySort.SUM, false, startIndex, endIndex,
+//                false, true, false);
 //        createGpuSeries(categories, seriesList, startIndex, endIndex, gpuList, false, false, null, null);
         // ------------------------------------------------------------------------------------------------------
 
         // -----------------------  GPU popularity chart for most popular GPUS ----------------------------------
-//        final Set<String> gpuList = getTopXGpus(csvData, 8, PopularitySort.SUM, false, startIndex, endIndex);
+//        final Set<String> gpuList = getTopXGpus(csvData, 8, PopularitySort.SUM, false, startIndex, endIndex,
+//                false, false, false);
 //        createGpuSeries(categories, seriesList, startIndex, endIndex, gpuList, false, false, null, null);
         // ------------------------------------------------------------------------------------------------------
 
@@ -167,7 +170,7 @@ public class LineChartApp extends Application {
                     continue;
                 }
                 categories.add(headers.get(i));
-                if (!gpu.get(i).equals("-")) {
+                if (!gpu.get(i).contains("-")) {
                     final double value = Double.parseDouble(gpu.get(i));
                     final XYChart.Data<String, Number> data = new XYChart.Data<>(headers.get(i), value);
                     series.getData().add(data);
